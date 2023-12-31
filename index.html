@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        padding: 10px;
+      }
+      img {
+        max-height: 350px;
+      }
+
+      .search {
+        display: flex;
+        flex-direction: row;
+        width: 350px;
+        gap: 10px;
+      }
+
+      input,
+      button {
+        padding: 7px 10px;
+        border: 1px solid rgb(205, 205, 205);
+        outline: black;
+        border-radius: 10px;
+      }
+
+      #search {
+        flex: 1;
+        background-color: rgb(243, 244, 245);
+      }
+
+      #ent {
+        background-color: rgb(24, 134, 245);
+        color: white;
+        font-weight: 500;
+      }
+
+      button {
+        background-color: green;
+        color: white;
+        font-weight: 500;
+      }
+    </style>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="main">
+      <img src="#" width="350" />
+      <div class="search">
+        <input type="search" name="search" id="search" placeholder="Search gifs"/>
+        <input type="button" value="Search" id="ent" />
+      </div>
+      <button>Change Image</button>
+    </div>
+
+    <script>
+      const img = document.querySelector("img");
+      const btn = document.querySelector("button");
+      const search = document.querySelector("#search");
+      const ent = document.querySelector("#ent");
+      let userInput = "";
+
+      const loadGif = (string = "babbies") => {
+        fetch(
+          "https://api.giphy.com/v1/gifs/translate?api_key=QSQeGOtbGjMQE4mNANZXIJPxZ4EfE2P2&s=" +
+            string,
+          { mode: "cors" }
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then((response) => {
+            img.src = response.data.images.original.url;
+            console.log(response.data.images.original.url);
+          })
+          .catch((response) => {
+            img.src =
+              "https://media2.giphy.com/media/p52j8LBZGNsMJPqqVF/giphy.gif?cid=336cc960o6308tq2kths1disw1a3kuvwkm1njth60p25kn0a&ep=v1_gifs_translate&rid=giphy.gif&ct=g";
+          });
+      };
+
+      loadGif();
+
+      ent.addEventListener("click", () => {
+        userInput = search.value;
+        search.value = "";
+        loadGif(userInput);
+      });
+
+      btn.addEventListener("click", (e) => {
+        if (userInput !== "") {
+          loadGif(userInput);
+        } else {
+          loadGif();
+        }
+      });
+    </script>
+  </body>
+</html>
